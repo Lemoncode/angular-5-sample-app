@@ -214,7 +214,7 @@ export class AppComponent implements OnInit {
 ``` 
 * Run the application at this point to verify that everything goes fine.
 
-### 6. So far, so good. We are going to show how to handle that the games get displayed by the user interaction, we new to edit the `app.component.html`, `app.component.css` and `app.component.ts`.
+### 6. So far, so good. We are going to show how to handle that the games get displayed by the user interaction, we have to edit the `app.component.html`, `app.component.css` and `app.component.ts`.
 
 * In `app.component.html`
 
@@ -224,11 +224,13 @@ export class AppComponent implements OnInit {
     {{title}}
   </h1>
   <div class="row">
-    <button class="btn btn-primary btn-sm pull-right" (click)="show=!show">Show games!</button>
+    <div class="col">
+      <button class="btn btn-primary btn-sm float-right" (click)="show=!show">Show games!</button>
+    </div>
   </div>
   <div class="games-container" *ngIf="show">
     <div *ngFor="let game of games">
-      <app-game-summary [game]=game></app-game-summary>
+        <app-game-summary [game]=game></app-game-summary>
     </div>
   </div>
 </div>
@@ -269,11 +271,11 @@ ng generate component game-sellers
 
 ```typescript
 import { Component, Input } from '@angular/core';
-import { ISeller } from '../../models/seller.model';
+import { ISeller } from '../models/seller.model';
 
 @Component({
   selector: 'app-game-sellers',
-  templateUrl: '',
+  templateUrl: './game-sellers.component.html',
 })
 export class GameSellersComponent {
   @Input() sellers: ISeller[];
@@ -285,8 +287,8 @@ export class GameSellersComponent {
 
 ```html
 <div class="row">
-  <div class="col-md-3">{{gameName}}</div>
-  <div class="col-md-9">
+  <div class="col-3">{{gameName}}</div>
+  <div class="col-9">
     <div *ngFor="let seller of sellers">
       <span>{{seller.name}}</span>
     </div>
@@ -294,63 +296,25 @@ export class GameSellersComponent {
 </div>
 ```
 
-* Do not forgive to reference on the component `game-sellers.component.ts` the new created view.
+### 8.We have to get notified when a game is selected (click on it), so we are going to generate a new custom event, in `game-summary.component.ts\game-summary.component.html`, so its parent get notified when the game has been clicked. 
 
 ```diff
-@Component({
-  selector: 'app-game-sellers',
--  templateUrl: '',
-+  templateUrl: './game-sellers.component.html',
-})
-```
-
-### 8. Now we have to register our new component, in `àpp.module.ts`.
-
-```diff
-...
-+import { GameSellersComponent } from './game/game-sellers.component';
-...
-
-@NgModule({
-  declarations: [
-    AppComponent,
-    GameSummaryComponent,
-+    GameSellersComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule
-  ],
-  providers: [
-    GameStockService
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
-```
-
-### 9.We have to get notified when a game is selected (click on it), so we are going to generate a new custom event, in `game-summary.component.ts\game-summary.component.html`, so its parent get notified when the game has been clicked. 
-
-```diff
-+<div class="well" (click)="selectedGame(gameName)">
++<div class="card card-block bg-faded" (click)="selectedGame(gameName)">
   <div class="row">
-+    <input type="text" #gameName [value]=game.name [hidden]=true/>
-    <div class="col-md-4">
++    <input type="text" #gameName [value]=game.name [hidden]=true>
+    <div class="col">
       <label>Name:</label>
       <span>{{game.name}}</span>
     </div>
-    <div class="col-md-4">
+    <div class="col">
       <label>Years from release:</label>
       <span>{{game.getYearsFromRelease()}}</span>
     </div>
-    <div class="col-md-4">
-      <div class="portrait">
-        <img class="img-responsive" [src]="game.imageUrl" alt="game image">
-      </div>
+    <div class="col">
+      <img class="img-fluid" [src]="game.imageUrl" alt="game image">
     </div>
   </div>
-</div>
++</div>
 ```
 ```typescript
 import { Component, Input } from '@angular/core';
@@ -371,7 +335,7 @@ export class GameSummaryComponent {
 * Note that we are passing a reference to the input element. 
 * Show current results on browser.
 
-### 10. Now we are going to notify the parent to handle, the selected game. In `game-summary.component.ts`, we introduce the following changes:
+### 9. Now we are going to notify the parent to handle, the selected game. In `game-summary.component.ts`, we introduce the following changes:
 
 ```diff
 -import { Component, Input } from '@angular/core';
@@ -400,15 +364,18 @@ export class GameSummaryComponent {
     {{title}}
   </h1>
   <div class="row">
-    <button class="btn btn-primary btn-sm pull-right" (click)="show=!show">Show games!</button>
+    <div class="col">
+      <button class="btn btn-primary btn-sm float-right" (click)="show=!show">Show games!</button>
+    </div>
   </div>
   <div class="games-container" *ngIf="show">
     <div *ngFor="let game of games">
--      <app-game-summary  [game]=game></app-game-summary>
-+      <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
+-        <app-game-summary [game]=game></app-game-summary>
++        <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
     </div>
   </div>
 </div>
+
 ```
 
 ```diff
@@ -444,7 +411,7 @@ export class AppComponent implements OnInit {
   }
 }
 ```
-### 12. For last we are going to render the related sellers to the selected game.
+### 10. For last we are going to render the related sellers to the selected game.
 
 ```diff
 <div class="container">
@@ -452,13 +419,15 @@ export class AppComponent implements OnInit {
     {{title}}
   </h1>
   <div class="row">
-    <button class="btn btn-primary btn-sm pull-right" (click)="show=!show">Show games!</button>
+    <div class="col">
+      <button class="btn btn-primary btn-sm float-right" (click)="show=!show">Show games!</button>
+    </div>
   </div>
   <div class="games-container" *ngIf="show">
     <div *ngFor="let game of games">
-      <app-game-summary (gameGhange)="gameChangeHandler($event)" [game]=game></app-game-summary>
+        <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
     </div>
-+    <app-game-sellers [gameName]="selectedGameInfo" [sellers]="sellers"></app-game-sellers>
   </div>
++  <app-game-sellers [gameName]="selectedGameInfo" [sellers]="sellers"></app-game-sellers>
 </div>
 ```
