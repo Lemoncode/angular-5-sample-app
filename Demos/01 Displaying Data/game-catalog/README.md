@@ -100,7 +100,7 @@ ngOnInit() {
 * Open console and type with root folder `game-catalog`:
 
 ```code
-$npm install bootstrap@4.0.0-alpha.6
+$npm install bootstrap@4.0.0-alpha.6 --save
 ```
 
 * Then on `styles.css` we can type
