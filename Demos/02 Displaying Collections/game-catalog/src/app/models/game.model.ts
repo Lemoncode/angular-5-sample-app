@@ -10,7 +10,8 @@ export class Game {
   }
 
   getYearsFromRelease(): number {
-    return 0;
+    const millisecondsDiff = this.getMillisecondsDiff(this.dateRelease.getTime());
+    return this.convertToYears(new Date(millisecondsDiff));
   }
 
   private getMillisecondsDiff = (milliseconds: number): number => Date.now() - milliseconds;

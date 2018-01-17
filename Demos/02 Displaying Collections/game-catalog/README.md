@@ -323,17 +323,19 @@ this.games = [
 </h1>
 
 -<div class="row">
--  <div class="col-md-6">
+-  <div class="col">
 -    <label>Name:</label>
 -    <span>{{game.name}}</span>
 -  </div>
--  <div class="col-md-6">
+-  <div class="col">
 -    <label>Years from release:</label>
 -    <span>{{game.getYearsFromRelease()}}</span>
 -  </div>
 -</div>
 
-+<div class="container" *ngFor="let game of games">
-+  <app-game-summary [game]=game></app-game-summary>
++<div class="container">
++  <div *ngFor="let game of games">
++      <app-game-summary [game]=game></app-game-summary>
++  </div>
 +</div>
 ```
