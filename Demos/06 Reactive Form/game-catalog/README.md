@@ -43,40 +43,45 @@ ng generate component create-seller
 * Remove `create-seller.component.spec.ts`
 
 ```html
-<div class="col-md-12">
+<div class="row">
+  <div class="col">
     <h3>Create Seller</h3>
+  </div>
 </div>
-<div class="col-md-6">
+<div class="row">
+  <div class="col-6">
     <form>
-        <div class="form-group">
-            <label for="sellercategory">Category</label>
-            <select class="form-control">
-                <option value="">select category...</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="tax">Tax</label>
-            <select class="form-control">
-                <option value="">select tax...</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="remarks">Remarks:</label>
-            <textarea  rows=3 class="form-control" placeholder="remarks..."></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="submit" class="btn btn-default">Cancel</button>
+      <div class="form-group">
+        <label for="sellercategory">Category</label>
+        <select class="form-control">
+          <option value="">select category...</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="tax">Tax</label>
+        <select class="form-control">
+          <option value="">select tax...</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="remarks">Remarks:</label>
+        <textarea rows=3 class="form-control" placeholder="remarks..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="submit" class="btn btn-default">Cancel</button>
     </form>
+  </div>
 </div>
+
 ```
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-create-seller',
-    templateUrl: './create-seller.component.html',
-    styles:[`
+  selector: 'app-create-seller',
+  templateUrl: './create-seller.component.html',
+  styles:[`
         em { color: #E05C65; padding-left: 10px; }
         .error input, .error select, .error textarea { background-color:#E3C3C5; }
         .error :: -webkit-input-placeholder { color: #999; }
@@ -84,11 +89,15 @@ import { Component, OnInit } from '@angular/core';
         .error :: -ms-input-placeholder { color: #999; }
     `]
 })
-
 export class CreateSellerComponent implements OnInit {
-    ngOnInit() {
-    }
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
 }
+
 ```
 ### 3. We create a new route for component, in `app.routes.ts`
 
@@ -281,10 +290,12 @@ export class CreateSellerComponent implements OnInit {
 ### 9. Now lets register our form as reactive form, for that purpose, we have to use [formGroup]="newContractForm" on our form node.
 
 ```diff html
-<div class="col-md-12">
-  <h3>Create Seller</h3>
+<div class="row">
+  <div class="col">
+    <h3>Create Seller</h3>
+  </div>
 </div>
-<div class="col-md-6">
+<div class="col-6">
 -  <form>
 +  <form [formGroup]="newSellerForm" (ngSubmit)="saveSeller(newSellerForm.value)">
       ....
@@ -425,7 +436,7 @@ export class CreateSellerComponent implements OnInit {
 ....
 <div class="form-group">
     <label for="sellercategory">Category</label>
-+    <em *ngIf="category.invalid && category.dirty" [ngClass]="{ 'error': category.invalid && category.dirty }" class="pull-right">
++    <em *ngIf="category.invalid && category.dirty" [ngClass]="{ 'error': category.invalid && category.dirty }" class="float-right">
 +      Required
 +    </em>
     <select formControlName="category" class="form-control" (change)="onChangeCategory($event.target.value)">
@@ -437,7 +448,7 @@ export class CreateSellerComponent implements OnInit {
 </div>
 <div class="form-group">
     <label for="tax">Tax</label>
-+    <em *ngIf="tax.invalid && tax.dirty" [ngClass]="{ 'error': tax.invalid && tax.dirty }" class="pull-right">
++    <em *ngIf="tax.invalid && tax.dirty" [ngClass]="{ 'error': tax.invalid && tax.dirty }" class="float-right">
 +      Required
 +    </em>
     <select formControlName="tax" class="form-control">
