@@ -14,6 +14,7 @@ import { GameSellersComponent } from './game-sellers/game-sellers.component';
 import { CreateGameComponent } from './game/create-game/create-game.component';
 import { GameListComponent } from './game/game-list/game-list.component';
 import { CreateSellerComponent } from './seller/create-seller/create-seller.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CreateSellerComponent } from './seller/create-seller/create-seller.comp
     GameSellersComponent,
     CreateGameComponent,
     GameListComponent,
-    CreateSellerComponent
+    CreateSellerComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

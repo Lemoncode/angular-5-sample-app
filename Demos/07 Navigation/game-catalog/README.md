@@ -41,36 +41,20 @@ ng generate component navbar
 * Remove `navbar.component.spec.ts`
 
 ```html
-<div class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" >App Games</a>
-    </div>
-    <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li>
-          <a>
-            All Games
-          </a>
-        </li>
-        <li>
-            <a>
-              Create Game
-            </a>
-        </li>
-      </ul>
-      <div class="navbar-header navbar-right">
-        <ul class="nav navbar-nav">
-         <li>
-            <a>
-                Login
-            </a>
-         </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+<nav class="navbar navbar-toggleable-sm bg-light">
+  <a class="navbar-brand" href="#">App Games</a>
+
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="#">All Games</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Create Game</a>
+    </li>
+  </ul>
+  <a class="navbar-brand" href="#">Login</a>
+</nav>
+
 ```
 ```typescript
 import { Component } from '@angular/core';
@@ -97,20 +81,16 @@ export class NavbarComponent {}
 ### 3. Now that we have the basic, html and component lets add some links to the navbar.
 
 ```diff
-<ul class="nav navbar-nav">
-  <li>
--    <a>
-+    <a [routerLink]="['/games']">  
-      All Games
-    </a>
-  </li>
-  <li>
--      <a>
-+      <a [routerLink]="['/games/new']">
-        Create Game
-      </a>
-  </li>
-</ul>
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+-      <a class="nav-link" href="#">All Games</a>
++      <a class="nav-link" [routerLink]="['/games']">All Games</a>
+    </li>
+    <li class="nav-item">
+-      <a class="nav-link" href="#">Create Game</a>
++      <a class="nav-link" [routerLink]="['/games/new']">Create Game</a>
+    </li>
+  </ul>
 ```
 * Test the app and the navigation.
 
@@ -169,8 +149,8 @@ export class GamesListComponent implements OnInit {
 ```diff
 -import { Component, Output, EventEmitter } from '@angular/core';
 +import { Component } from '@angular/core';
-+import { GameStockService } from '../services/gameStock.service';
-+import { Game } from '../models/game.model';
++import { GameStockService } from '../../services/gameStock.service';
++import { Game } from '../../models/game.model';
 
 @Component({
   selector: 'app-create-game',
@@ -221,9 +201,14 @@ export const appRoutes: Routes = [
 
 ```diff
 <div class="container">
--  <div *ngFor="let game of games">
-+  <div *ngFor="let game of games" [routerLink]="['/games', game.name]">
-    <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
+  <h1>
+    {{title}}
+  </h1>
+  <div class="games-container">
+-    <div *ngFor="let game of games">
++    <div *ngFor="let game of games" [routerLink]="['/games', game.name]">
+        <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
+    </div>
   </div>
 -  <app-game-sellers [gameName]="selectedGameInfo" [sellers]="sellers"></app-game-sellers>
 </div>
@@ -259,7 +244,7 @@ export const appRoutes: Routes = [
 ```diff
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-+import { GameStockService } from '../../services/gameStock.service';
++import { GameStockService } from '../services/gameStock.service';
 
 @Component({
   selector: 'app-game-sellers-details',
@@ -280,70 +265,70 @@ export class GameSellersDetailsComponent implements OnInit {
 
 ```diff
 -<div class="row">
--  <div class="col-md-3">{{gameName}}</div>
--  <div class="col-md-9">
+-  <div class="col-3">{{gameName}}</div>
+-  <div class="col-9">
 -    <div *ngFor="let seller of sellers">
 -      <span>{{seller.name}}</span>
 -    </div>
 -  </div>
 -</div>
-+<div>
-+  <h2>Game Details</h2>
-+  <div class="row">
-+    <div class="col-md-2">
-+      <h3>Sellers</h3>
-+    </div>
-+    <div class="col-md-8">
-+      <!-- TODO: Add the options for filtering and sorting -->
-+    </div>
-+    <div class="col-md-2">
-+      <a (click)="toggleAddSeller()">Add Seller</a>
-+    </div>
-+    <div *ngIf="!addMode">
-+      <h2>{{gameName}}</h2>
-+      <div *ngFor="let seller of sellers">
-+        <span>{{seller.name}}</span>
-+      </div>
-+    </div>
-+    <app-create-seller *ngIf="addMode"></app-create-seller>
++<h2>Game Details</h2>
++<div class="row">
++  <div class="col-2">
++    <h3>Sellers</h3>
++  </div>
++  <div class="col-8">
++    <!-- TODO: Add options for filtering -->
++  </div>
++  <div class="col-2">
++      <a (click)="toggleAddSeller()">Add seller</a>
 +  </div>
 +</div>
++<div class="row">
++  <div class="col" *ngIf="!addMode">
++    <h2>{{gameName}}</h2>
++    <div *ngFor="let seller of sellers">
++      <span>{{seller.name}}</span>
++    </div>
++  </div>
++</div>
++<app-create-seller *ngIf="addMode"></app-create-seller>
 ```
 
 ```html game-sellers.component.html
-<div>
-  <h2>Game Details</h2>
-  <div class="row">
-    <div class="col-md-2">
-      <h3>Sellers</h3>
-    </div>
-    <div class="col-md-8">
-      <!-- TODO: Add the options for filtering and sorting -->
-    </div>
-    <div class="col-md-2">
-      <a (click)="toggleAddSeller()">Add Seller</a>
-    </div>
-    <div *ngIf="!addMode">
-      <h2>{{gameName}}</h2>
-      <div *ngFor="let seller of sellers">
-        <span>{{seller.name}}</span>
-      </div>
-    </div>
-    <app-create-seller *ngIf="addMode"></app-create-seller>
+<h2>Game Details</h2>
+<div class="row">
+  <div class="col-2">
+    <h3>Sellers</h3>
+  </div>
+  <div class="col-8">
+    <!-- TODO: Add options for filtering -->
+  </div>
+  <div class="col-2">
+      <a (click)="toggleAddSeller()">Add seller</a>
   </div>
 </div>
+<div class="row">
+  <div class="col" *ngIf="!addMode">
+    <h2>{{gameName}}</h2>
+    <div *ngFor="let seller of sellers">
+      <span>{{seller.name}}</span>
+    </div>
+  </div>
+</div>
+<app-create-seller *ngIf="addMode"></app-create-seller>
 ```
 
 
-```diff game-sellers-details.component.ts
+```diff game-sellers.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { GameStockService } from '../../services/gameStock.service';
-+import { ISeller } from '../../models/seller.model';
+import { GameStockService } from '../services/gameStock.service';
++import { ISeller } from '../models/seller.model';
 
 @Component({
-  selector: 'app-game-sellers-details',
-  templateUrl: './game-sellers-details.component.html'
+  selector: 'app-game-sellers',
+  templateUrl: './game-sellers.component.html'
 })
 export class GameSellersDetailsComponent implements OnInit {
 +  gameName: string;
