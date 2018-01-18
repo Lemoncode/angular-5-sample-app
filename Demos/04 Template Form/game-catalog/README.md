@@ -87,7 +87,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-create-game',
-  templateUrl: '',
+  templateUrl: './create-game.component.html',
   styles: [`
     em { color: red; }
   `]
@@ -104,7 +104,7 @@ export class CreateGameComponent {
   Game Name:
 </label>
 +<em *ngIf="createGameForm.controls.name?.invalid &&
-+  (createGameForm.controls.name?.touched)" class="pull-right">
++  (createGameForm.controls.name?.touched)" class="float-right">
 +  Required
 +</em>
 <input type="text"
@@ -121,7 +121,7 @@ export class CreateGameComponent {
     Date Release:
   </label>
 +  <em *ngIf="createGameForm.controls.daterelease?.invalid &&
-+    (createGameForm.controls.daterelease?.touched)" class="pull-right"
++    (createGameForm.controls.daterelease?.touched)" class="float-right"
 +  >
 +    Required
 +  </em>
@@ -176,14 +176,16 @@ export class CreateGameComponent {
   </h1>
 +  <app-create-game></app-create-game>
   <div class="row">
-    <button class="btn btn-primary btn-sm pull-right" (click)="show=!show">Show games!</button>
+    <div class="col">
+      <button class="btn btn-primary btn-sm float-right" (click)="show=!show">Show games!</button>
+    </div>
   </div>
   <div class="games-container" *ngIf="show">
     <div *ngFor="let game of games">
-      <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
+        <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
     </div>
-    <app-game-sellers [gameName]="selectedGameInfo" [sellers]="sellers"></app-game-sellers>
   </div>
+  <app-game-sellers [gameName]="selectedGameInfo" [sellers]="sellers"></app-game-sellers>
 </div>
 
 ```
@@ -199,12 +201,12 @@ export class CreateGameComponent {
   </label>
 +  <em *ngIf="createGameForm.controls.imageurl?.invalid &&
 +    createGameForm.controls.imageurl?.errors.required &&
-+    (createGameForm.controls.imageurl?.touched)" class="pull-right">
++    (createGameForm.controls.imageurl?.touched)" class="float-right">
 +    Required
 +  </em>
 +  <em *ngIf="createGameForm.controls.imageurl?.invalid &&
 +    createGameForm.controls.imageurl?.errors.pattern &&
-+    (createGameForm.controls.imageurl?.touched)" class="pull-right">
++    (createGameForm.controls.imageurl?.touched)" class="float-right">
 +    Not valid URL
 +  </em>
   <input type="text"
@@ -244,8 +246,8 @@ export class CreateGameComponent {
     Game Name:
   </label>
   <em *ngIf="createGameForm.controls.name?.invalid &&
--    (createGameForm.controls.name?.touched)" class="pull-right">
-+    (createGameForm.controls.name?.touched || mouseoverLogin)" class="pull-right">
+-    (createGameForm.controls.name?.touched)" class="float-right">
++    (createGameForm.controls.name?.touched || mouseoverLogin)" class="float-right">
     Required
   </em>
   <input type="text"
@@ -264,14 +266,14 @@ export class CreateGameComponent {
   </label>
   <em *ngIf="createGameForm.controls.imageurl?.invalid &&
     createGameForm.controls.imageurl?.errors.required &&
--    (createGameForm.controls.imageurl?.touched)" class="pull-right">
-+    (createGameForm.controls.imageurl?.touched || mouseoverLogin)" class="pull-right">
+-    (createGameForm.controls.imageurl?.touched)" class="float-right">
++    (createGameForm.controls.imageurl?.touched || mouseoverLogin)" class="float-right">
     Required
   </em>
   <em *ngIf="createGameForm.controls.imageurl?.invalid &&
     createGameForm.controls.imageurl?.errors.pattern &&
--    (createGameForm.controls.imageurl?.touched)" class="pull-right">
-+    (createGameForm.controls.imageurl?.touched || mouseoverLogin)" class="pull-right">
+-    (createGameForm.controls.imageurl?.touched)" class="float-right">
++    (createGameForm.controls.imageurl?.touched || mouseoverLogin)" class="float-right">
     Not valid URL
   </em>
   <input type="text"
@@ -290,8 +292,8 @@ export class CreateGameComponent {
     Date Release:
   </label>
   <em *ngIf="createGameForm.controls.daterelease?.invalid &&
--    (createGameForm.controls.daterelease?.touched)" class="pull-right"
-+    (createGameForm.controls.daterelease?.touched || mouseoverLogin)" class="pull-right"
+-    (createGameForm.controls.daterelease?.touched)" class="float-right"
++    (createGameForm.controls.daterelease?.touched || mouseoverLogin)" class="float-right"
   >
     Required
   </em>
@@ -360,7 +362,7 @@ export class GameStockService {
 -  <app-create-game></app-create-game>
 +  <app-create-game (createGameEvent)="createGameEventHandler($event)"></app-create-game>
   <div class="row">
-    <button class="btn btn-primary btn-sm pull-right" (click)="show=!show">Show games!</button>
+    <button class="btn btn-primary btn-sm float-right" (click)="show=!show">Show games!</button>
   </div>
   <div class="games-container" *ngIf="show">
     <div *ngFor="let game of games">

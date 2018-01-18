@@ -24,7 +24,21 @@ export class AppComponent implements OnInit {
     this.sellers = (sellers && sellers.length > 0) ? sellers : [];
   }
 
+  createGameEventHandler($event: any) {
+    const game = this.mapper($event);
+    this.gameStockService.addGame(game);
+    this.loadGames();
+  }
+
+  private mapper(formValues: any): Game {
+    return new Game(formValues.name, formValues.daterelease, formValues.imageurl);
+  }
+
   ngOnInit(): void {
+    this.loadGames();
+  }
+
+  private loadGames(): void {
     this.games = this.gameStockService.getGames();
   }
 }

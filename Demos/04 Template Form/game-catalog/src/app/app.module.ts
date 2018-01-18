@@ -8,12 +8,14 @@ import { GameSummaryComponent } from './game/game-summary.component';
 
 import { GameStockService } from './services/gameStock.service';
 import { GameSellersComponent } from './game-sellers/game-sellers.component';
+import { CreateGameComponent } from './game/create-game/create-game.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameSummaryComponent,
-    GameSellersComponent
+    GameSellersComponent,
+    CreateGameComponent
   ],
   imports: [
     BrowserModule,

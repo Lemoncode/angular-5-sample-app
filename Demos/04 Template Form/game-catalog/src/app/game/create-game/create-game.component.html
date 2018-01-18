@@ -1,0 +1,51 @@
+<h3>Create Game</h3>
+<form #createGameForm="ngForm" autocomplete="off" novalidate (ngSubmit)="createGame(createGameForm.value)">
+  <div class="form-group">
+    <label for="name">
+      Game Name:
+    </label>
+    <em *ngIf="createGameForm.controls.name?.invalid &&
+      (createGameForm.controls.name?.touched || mouseoverLogin)" class="float-right">
+      Required
+    </em>
+    <input type="text" name="name" (ngModel)="name" class="form-control" placeholder="Game Name" required />
+  </div>
+  <div class="form-group">
+    <label for="imageurl">
+      Image URL:
+    </label>
+    <em *ngIf="createGameForm.controls.imageurl?.invalid &&
+    createGameForm.controls.imageurl?.errors.required &&
+    (createGameForm.controls.imageurl?.touched || mouseoverLogin)" class="float-right">
+      Required
+    </em>
+    <em *ngIf="createGameForm.controls.imageurl?.invalid &&
+    createGameForm.controls.imageurl?.errors.pattern &&
+    (createGameForm.controls.imageurl?.touched || mouseoverLogin)" class="float-right">
+      Not valid URL
+    </em>
+    <input
+      type="text"
+      name="imageurl"
+      (ngModel)="imageurl"
+      class="form-control"
+      placeholder="Image URL"
+      required
+      pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"
+    />
+  </div>
+  <div class="form-group">
+    <label for="daterelease">
+      Date Release:
+    </label>
+    <em *ngIf="createGameForm.controls.daterelease?.invalid &&
+      (createGameForm.controls.daterelease?.touched || mouseoverLogin)" class="float-right">
+      Required
+    </em>
+    <input type="date" name="daterelease" (ngModel)="daterelease" class="form-control" placeholder="Date Release" min="1980-01-01"
+      required />
+  </div>
+  <span (mouseenter)="mouseoverLogin=true" (mouseleave)="mouseoverLogin=true">
+    <button type="submit" [disabled]="createGameForm.invalid" class="btn btn-primary">Create</button>
+  </span>
+</form>
