@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { GameStockService } from './services/gameStock.service';
 import { SellerCategoryService } from './services/sellerCategory.service';
+import { GameRouterActivatorService } from './services/game-router-activator.service';
+import { CHECKDIRTY_TOKEN, checkDirtyState } from './services/checkDirty.service';
 import { appRoutes } from './app.routes';
 
 import { AppComponent } from './app.component';
@@ -15,6 +17,7 @@ import { CreateGameComponent } from './game/create-game/create-game.component';
 import { GameListComponent } from './game/game-list/game-list.component';
 import { CreateSellerComponent } from './seller/create-seller/create-seller.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { Error404Component } from './errors/404.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     CreateGameComponent,
     GameListComponent,
     CreateSellerComponent,
-    NavbarComponent
+    NavbarComponent,
+    Error404Component
   ],
   imports: [
     BrowserModule,
@@ -35,7 +39,12 @@ import { NavbarComponent } from './navbar/navbar.component';
   ],
   providers: [
     GameStockService,
-    SellerCategoryService
+    SellerCategoryService,
+    GameRouterActivatorService,
+    {
+      provide: CHECKDIRTY_TOKEN,
+      useValue: checkDirtyState
+    }
   ],
   bootstrap: [AppComponent]
 })

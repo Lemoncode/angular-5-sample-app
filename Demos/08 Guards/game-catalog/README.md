@@ -215,7 +215,7 @@ export class CreateGameComponent {
 
 ```diff html
 ....
-+    <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
++    <button class="btn btn-default" (click)="cancel()">Cancel</button>
   </form>
 </div>
 ```
@@ -223,14 +223,14 @@ export class CreateGameComponent {
 ### 7. We are going to avoid that user does not navigate away from CreateCustomerComponent without confirm. Create `checkDirty.service.ts` and place it in `app/services`
 
 ```typescript
-import { OpaqueToken } from '@angular/core';
-import { CreateGameComponent } from '../game/create-game.component';
+import { InjectionToken } from '@angular/core';
+import { CreateGameComponent } from '../game/create-game/create-game.component';
 
-export let CHECKDIRTY_TOKEN = new OpaqueToken('checkDirty');
+export let CHECKDIRTY_TOKEN = new InjectionToken('checkDirty');
 
 export function checkDirtyState(component: CreateGameComponent) {
   if (component.isDirty) {
-    return window.confirm('You do not have saved this game, do you really want to cancel?');
+    return window.confirm('You do not saved, do yo really want to cancel?')
   }
   return true;
 }
@@ -295,7 +295,7 @@ import { appRoutes } from './app.routes';
 export class AppModule { }
 
 ```
-### 9. For last we have to link the route.
+### 9. For last we have to link the route. Open and edit `app.routes.ts`.
 
 ```diff
 import { Routes } from '@angular/router';
