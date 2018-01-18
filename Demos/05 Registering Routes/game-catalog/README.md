@@ -51,31 +51,32 @@ ng generate component game-list
   <h1>
     {{title}}
   </h1>
-  <div *ngFor="let game of games">
-    <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
+  <div class="games-container">
+    <div *ngFor="let game of games">
+        <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
+    </div>
   </div>
   <app-game-sellers [gameName]="selectedGameInfo" [sellers]="sellers"></app-game-sellers>
 </div>
+
 ```
-* It's the same as `app.component.ts`, but without the property show, changing references route and removing styles.
+* It's the same as `app.component.ts`, but without the property `show` and the method `createGameEventHandler`, changing references route and removing styles.
 ```typescript
 import { Component, OnInit } from '@angular/core';
-import { Game } from '../models/game.model';
-import { ISeller } from '../models/seller.model';
-import { GameStockService } from '../services/gameStock.service';
+import { GameStockService } from '../../services/gameStock.service';
+import { Game } from '../../models/game.model';
+import { ISeller } from '../../models/seller.model';
 
 @Component({
-  selector: 'app-games-list',
-  templateUrl: './games-list.component.html'
+  selector: 'app-game-list',
+  templateUrl: './game-list.component.html',
 })
-export class GamesListComponent implements OnInit {
-  title = 'User Interactions Demo';
+export class GameListComponent implements OnInit {
   games: Game[];
   selectedGameInfo: string;
   sellers: ISeller[];
 
-  constructor(private gameStockService: GameStockService) {
-  }
+  constructor(private gameStockService: GameStockService) {}
 
   gameChangeHandler($event: any) {
     const sellers = this.gameStockService.getGameSellers($event);
@@ -84,24 +85,20 @@ export class GamesListComponent implements OnInit {
     this.sellers = (sellers && sellers.length > 0) ? sellers : [];
   }
 
-  createGameEventHandler($event: any) {
-    const game = this.mapper($event);
-    this.gameStockService.addGame(game);
-    this.loadGames();
-  }
-
   private mapper(formValues: any): Game {
     return new Game(formValues.name, formValues.daterelease, formValues.imageurl);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadGames();
   }
 
-  private loadGames() {
+  private loadGames(): void {
     this.games = this.gameStockService.getGames();
   }
+
 }
+
 ```
 
 ### 2. Now we are going to create a new file that will host our routes for the `app.module`, lets create this file at the same level as `app.module`, `/src/app/app.routes.ts`
@@ -118,7 +115,7 @@ export const appRoutes: Routes = [
 
 ```diff
 import { Routes } from '@angular/router';
-+import { GamesListComponent } from './game/games-list.component';
++import { GamesListComponent } from './game/games-list/games-list.component';
 
 export const appRoutes: Routes = [
 +  { path: 'games', component: GamesListComponent }
@@ -129,7 +126,7 @@ export const appRoutes: Routes = [
 
 ```diff
 import { Routes } from '@angular/router';
-import { GamesListComponent } from './game/games-list.component';
+import { GamesListComponent } from './game/games-list/games-list.component';
 
 export const appRoutes: Routes = [
   { path: 'games', component: GamesListComponent },
@@ -141,22 +138,24 @@ export const appRoutes: Routes = [
 
 ```diff
 ....
-+import { RouterModule} from '@angular/router';
++import { RouterModule } from '@angular/router';
+
+import { GameStockService } from './services/gameStock.service';
++import { appRoutes } from './app.routes';
 
 import { AppComponent } from './app.component';
 import { GameSummaryComponent } from './game/game-summary.component';
-import { GameSellersComponent } from './game/game-sellers.component';
-import { CreateGameComponent } from './game/create-game.component';
-import { GamesListComponent } from './game/games-list.component';
-import { GameStockService } from './services/gameStock.service';
-
-+import { appRoutes } from './app.routes';
-
+import { GameSellersComponent } from './game/game-sellers/game-sellers.component';
+import { CreateGameComponent } from './game/create-game/create-game.component';
+import { GameListComponent } from './game/game-list/game-list.component';
 
 @NgModule({
   declarations: [
-    ...
-    GamesListComponent
+    AppComponent,
+    GameSummaryComponent,
+    GameSellersComponent,
+    CreateGameComponent,
+    GameListComponent
   ],
   imports: [
     BrowserModule,
@@ -170,6 +169,7 @@ import { GameStockService } from './services/gameStock.service';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
 
 ```
 
