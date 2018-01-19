@@ -30,7 +30,24 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## NOTE: In this demo we are going to create pipes in Angular 4.
 ## Steps.
 
-### 1. Let's create a new component under `src/app/seller`, `seller-details.component.*`
+### 1. In this demo we are going top use external icons. We are going to install and use `font-awesome`.
+
+```bash
+npm install --save font-awesome
+```
+* Edit `src/styles` as follows
+
+```diff
+@import '../node_modules/bootstrap/dist/css/bootstrap.css';
++@import '../node_modules/font-awesome/css/font-awesome.css';
+
+body {
+  padding: 2em;
+}
+
+```
+
+### 2. Let's create a new component under `src/app/seller`, `seller-details.component.*`
 
 * Open `bash` in `src/app/seller`
 
@@ -41,7 +58,7 @@ $ng generate component seller-details
 * Remove `*.spec.ts`
 
 ```html
-<div class="well">
+<div class="card card-block bg-faded">
   <h4>{{seller.name}}</h4>
   <span>Cantidad disponible: {{seller.amount}}</span>
   <span>Precio unitario: {{seller.price}}</span>
@@ -61,7 +78,7 @@ export class SellerDetailsComponent {
 }
 ```
 
-### 2 Let's change `game-sellers.comnponent.html`, to use `app-seller-details`
+### 3. Let's change `game-sellers.comnponent.html`, to use `app-seller-details`
 
 ```diff
 <div>
@@ -91,10 +108,10 @@ export class SellerDetailsComponent {
 
 * Run the application.
 
-### 2. To watch the value displayed with the currency, we can use an Angular built in pipe.
+### 4. To watch the value displayed with the currency, we can use an Angular built in pipe.
 
 ```diff
-<div class="well">
+<div class="card card-block bg-faded">
   <h4>{{seller.name}}</h4>
   <span>Cantidad disponible: {{seller.amount}}</span>
 -  <span>Precio unitario: {{seller.price}}</span>
@@ -102,7 +119,7 @@ export class SellerDetailsComponent {
 </div>
 ```
 
-### 3. Now we are going to create a custom pipe that will display a check icon if a game is available, and cross if not.
+### 5. Now we are going to create a custom pipe that will display a check icon if a game is available, and cross if not.
 
 * We create a new folder call `app/pipes`. Inside we can place now `available.pipe.ts`.
 
@@ -119,7 +136,7 @@ export class AvailablePipe implements PipeTransform {
 }
 
 ```
-### 4. Let's register this custom pipe in `app.module.ts`.
+### 6. Let's register this custom pipe in `app.module.ts`.
 
 ```diff
 ....
@@ -162,14 +179,14 @@ import { appRoutes } from './app.routes';
 export class AppModule { }
 
 ```
-### 5. For last we use it inside of `seller-details.comnponent.html`
+### 7. For last we use it inside of `seller-details.comnponent.html`
 
 ```diff
 <div class="well">
   <h4>{{seller.name}}</h4>
   <span>Cantidad disponible: {{seller.amount}}</span>
   <span>Precio unitario: {{seller.price | currency:'EUR':true}}</span>
-+  <span [class]="seller.amount | available"></span>
++  <i [class]="seller.amount | available" aria-hidden="true"></i>
 </div>
 
 ```

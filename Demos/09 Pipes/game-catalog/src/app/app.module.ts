@@ -18,6 +18,8 @@ import { GameListComponent } from './game/game-list/game-list.component';
 import { CreateSellerComponent } from './seller/create-seller/create-seller.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { Error404Component } from './errors/404.component';
+import { SellerDetailsComponent } from './seller/seller-details/seller-details.component';
+import { AvailablePipe } from './pipes/available.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { Error404Component } from './errors/404.component';
     GameListComponent,
     CreateSellerComponent,
     NavbarComponent,
-    Error404Component
+    Error404Component,
+    SellerDetailsComponent,
+    AvailablePipe
   ],
   imports: [
     BrowserModule,
