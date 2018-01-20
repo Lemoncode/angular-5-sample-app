@@ -298,7 +298,7 @@ export class SellerListComponent implements OnChanges {
 
 ```
 
-### 7. Now for last we are going to add a new `game` on server. Opne `app/services/gameStock.service.ts`
+### 7. Now for last we are going to add a new `game` on server. Open `app/services/gameStock.service.ts`
 
 ```diff
 import { Injectable } from '@angular/core';

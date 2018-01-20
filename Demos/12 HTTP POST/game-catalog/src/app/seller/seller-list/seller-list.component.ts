@@ -12,10 +12,13 @@ export class SellerListComponent implements OnChanges {
   visibleSellers: ISeller[];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['filterBy']) {
+    if (changes['sellers']) {
+      this.visibleSellers = this.sellers;
+    }
+    if (changes['filterBy'] && this.sellers) {
       this.visibleSellers = this.filterSellers(changes['filterBy'].currentValue);
     }
-    if (changes['sortBy']) {
+    if (changes['sortBy'] && this.sellers) {
       this.sortSellers(changes['sortBy'].currentValue);
     }
   }

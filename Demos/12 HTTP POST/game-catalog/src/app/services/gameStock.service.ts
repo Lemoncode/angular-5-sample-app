@@ -1,81 +1,95 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../models/game.model';
 import { ISeller } from '../models/seller.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { map, reduce, flatMap, merge, skip } from 'rxjs/operators';
 
-const GAMES: Game[] = [
-  new Game(
-    'Super Mario Bros',
-    '13 September 1985',
-    // tslint:disable-next-line:max-line-length
-    'http://cdn02.nintendo-europe.com/media/images/10_share_images/games_15/virtual_console_nintendo_3ds_7/SI_3DSVC_SuperMarioBros_image1280w.jpg',
-    [
-      {
-        id: 1,
-        name: 'Old shop',
-        price: 95,
-        amount: 2,
-        isAvailable: true,
-      },
-      {
-        id: 2,
-        name: 'New shop',
-        price: 115,
-        amount: 1,
-        isAvailable: true,
-      },
-      {
-        id: 3,
-        name: 'Regular shop',
-        price: 135,
-        amount: 0,
-        isAvailable: false,
-      }
-    ]
-  ),
-  new Game(
-    'Legend of Zelda',
-    '21 February 1986',
-    // tslint:disable-next-line:max-line-length
-    'http://www.hobbyconsolas.com/sites/hobbyconsolas.com/public/styles/main_element/public/media/image/2013/06/227201-analisis-legend-zelda-oracle-ages/seasons.jpg?itok=A8pOGd_f',
-    [
-      {
-        id: 3,
-        name: 'Old shop',
-        price: 125,
-        amount: 0,
-        isAvailable: false,
-      },
-      {
-        id: 4,
-        name: 'New shop',
-        price: 145,
-        amount: 1,
-        isAvailable: true,
-      },
-    ]
-  ),
-  new Game(
-    'Sonic',
-    '26 June 1981',
-    'https://www-sonicthehedgehog-com-content.s3.amazonaws.com/test/Sonic_Mania_Block_3_video_1_2.jpg',
-  ),
-];
+/*
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { _throw } from 'rxjs/observable/throw';
+import { delayWhen } from 'rxjs/operators';
+import { timer } from 'rxjs/observable/timer';
+*/
+
+/*
+// values
+var letters = 'J,A,M,I,E'.split(',');
+var interval = 2000;
+
+// streams
+var letters$ = Rx.Observable.from(letters);
+var timer$ = Rx.Observable.timer(0, interval);
+var lettersOverTime$ = Rx.Observable.zip(letters$, timer$, (item, i) => item);
+var eventualWord$ = lettersOverTime$.scan((word, letter) => word + letter, '').last();
+
+// log the next letter every 2 secs
+lettersOverTime$.subscribe(console.log);
+
+// log the full word when complete
+eventualWord$.subscribe(console.log);
+
+/* output:
+ *
+ * lettersOverTime$ : "J"---"A"---"M"---"I"---"E"---|
+ * eventualWord$    : -------------------------------"JAMIE"|
+ */
+
+
 
 @Injectable()
 export class GameStockService {
-  getGames(): Game[] {
-    return GAMES;
+  constructor(private http: HttpClient) { }
+
+  mapGame(game: any): Game {
+    return (game.sellers && game.sellers.length) ?
+      new Game(
+        game.name,
+        game.dateRelease.toString(),
+        game.imageUrl,
+        game.sellers
+      ) :
+      new Game(
+        game.name,
+        game.dateRelease.toString(),
+        game.imageUrl,
+      );
+  }
+  // Reference: https://gist.github.com/JamieMason/303c5fc90b28c28a804e3f7ea9ab01f1
+  getGames(): Observable<Game[]> {
+    return this.http.get<Game[]>(`/api/games`)
+      .pipe(
+        flatMap(g => g),
+        map(this.mapGame),
+        merge(s => s),
+        skip(1),
+        reduce((acc, value) => {
+          return [...acc, value]
+        }, [])
+      );
   }
 
-  getGame(name: string): Game {
-    return GAMES.find((game) => game.name === name);
+  getGame(name: string): Observable<Game> {
+    return this.http.get<Game>(`/api/games/${name}`);
   }
 
-  getGameSellers(name: string): ISeller[] {
-    return this.getGame(name).sellers || null;
+  getGameSellers(name: string): Observable<ISeller[]> {
+    return this.getGame(name)
+      .pipe(
+      map(g => g.sellers)
+      )
   }
 
-  addGame(game: Game): void {
-    GAMES.push(game);
+  addGame(game: Game): Observable<Game> {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+
+    return this.http.post<Game>(
+      '/api/games',
+      game,
+      httpOptions
+    );
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameStockService } from '../../services/gameStock.service';
 import { Game } from '../../models/game.model';
 import { ISeller } from '../../models/seller.model';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-game-list',
@@ -12,13 +13,18 @@ export class GameListComponent implements OnInit {
   selectedGameInfo: string;
   sellers: ISeller[];
 
-  constructor(private gameStockService: GameStockService) {}
+  constructor(private gameStockService: GameStockService) { }
 
   gameChangeHandler($event: any) {
-    const sellers = this.gameStockService.getGameSellers($event);
-    const selectedGame = this.gameStockService.getGame($event);
-    this.selectedGameInfo = `${selectedGame.name}, Age:${selectedGame.getYearsFromRelease()}`;
-    this.sellers = (sellers && sellers.length > 0) ? sellers : [];
+    this.gameStockService.getGameSellers($event)
+      .subscribe((s) => {
+        this.sellers = (s && s.length > 0) ? s : [];
+      });
+    this.gameStockService.getGame($event)
+      .subscribe((selectedGame) => {
+        const mappedGame = this.gameStockService.mapGame(selectedGame);
+        this.selectedGameInfo = `${mappedGame.name}, Age:${mappedGame.getYearsFromRelease()}`;
+      });
   }
 
   ngOnInit(): void {
@@ -26,7 +32,8 @@ export class GameListComponent implements OnInit {
   }
 
   private loadGames(): void {
-    this.games = this.gameStockService.getGames();
+    this.gameStockService.getGames()
+      .subscribe((games) => this.games = games);
   }
 
 }
