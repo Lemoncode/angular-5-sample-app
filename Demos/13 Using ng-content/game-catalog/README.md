@@ -33,7 +33,7 @@ Starts from previous demo.
 
 ## Steps
 
-### 1. Create a new folder `common`, inside place a new component `collapsible-card.component.ts`
+### 1. Create a new folder `src/app/common`, inside place a new component `collapsible-card.component.ts`
 
 ```typescript
 import { Component, Input } from '@angular/core';
@@ -56,8 +56,7 @@ export class CollapsibleCardComponent {
 }
 ```
 
-At this point what we got is a div that will toggle its visibility,
-when the user clicks on it.
+* At this point what we got is a div that will toggle its visibility, when the user clicks on it.
 
 ### 2. Now we are going to use ng-content directive to fill the component with outer content. 
 
@@ -81,36 +80,39 @@ when the user clicks on it.
 
 * NOTE: ng-content supports id selectors and class selectors. Here we are using attributes instead.
 
-### 3. Lets register in our module the new component.
-....
-import { CollapsiblecardComponent } from './common/collapsible-card.component';
+### 3. Lets register in `app.module.ts` the new component.
+
+```diff
++import { CollapsiblecardComponent } from './common/collapsible-card.component';
 ....
 @NgModule({
   declarations: [
     ....
-    CollapsibleCardComponent
++    CollapsibleCardComponent
   ],
   ....
 })
-...
+```
 
-### 4. Now we can use our new component inside our application. Open customer-contracts.component.html
+### 4. Now we can use our new component inside our application. Open `seller-details.component.html`, and edit as follows:
 
-<div class="row" *ngFor="let contract of visibleContracts">
-    <div class="col-md-8 col-md-offset-2">
-        <collapsible-card>
-            <div card-title>
-                <label>Contract Identifier:</label>
-                <span>{{contract.contractIdentifier}}</span>
-            </div>
-            <div card-body>
-                <h4 *ngIf="contract.isActive">Activo</h4>
-                <span>Precio por mes: {{contract.priceMonthly | currency:'EUR':true}}</span>
-                <div class="pull-right">
-                    <label>Contract Type:</label>
-                    <span>{{contract.typeId | contracttype}}</span>
-                </div>
-            </div>
-        </collapsible-card>
-    </div>
+```diff
+<div class="card card-block bg-faded">
+-  <h4>{{seller.name}}</h4>
+-  <span>Cantidad disponible: {{seller.amount}}</span>
+-  <span>Precio unitario: {{seller.price | currency:'EUR':true}}</span>
+-  <i [class]="seller.amount | available" aria-hidden="true"></i>
++  <collapsible-card>
++    <div card-title>
++      {{seller.name}}
++    </div>
++    <div card-body>
++      <span>Cantidad disponible: {{seller.amount}}</span>
++      <span>Precio unitario: {{seller.price | currency:'EUR':true}}</span>
++      <i [class]="seller.amount | available" aria-hidden="true"></i>
++    </div>
++  </collapsible-card>
 </div>
+```
+
+

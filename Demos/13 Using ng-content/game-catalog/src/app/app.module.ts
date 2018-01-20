@@ -21,6 +21,7 @@ import { Error404Component } from './errors/404.component';
 import { SellerDetailsComponent } from './seller/seller-details/seller-details.component';
 import { AvailablePipe } from './pipes/available.pipe';
 import { SellerListComponent } from './seller/seller-list/seller-list.component';
+import { CollapsibleCardComponent } from './common/collapsible-card.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { SellerListComponent } from './seller/seller-list/seller-list.component'
     Error404Component,
     SellerDetailsComponent,
     AvailablePipe,
-    SellerListComponent
+    SellerListComponent,
+    CollapsibleCardComponent
   ],
   imports: [
     BrowserModule,

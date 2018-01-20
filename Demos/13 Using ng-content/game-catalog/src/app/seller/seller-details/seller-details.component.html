@@ -1,7 +1,13 @@
 <div class="card card-block bg-faded">
-  <h4>{{seller.name}}</h4>
-  <span>Cantidad disponible: {{seller.amount}}</span>
-  <span>Precio unitario: {{seller.price | currency:'EUR':true}}</span>
-  <i [class]="seller.amount | available" aria-hidden="true"></i>
+  <collapsible-card>
+    <div card-title>
+      {{seller.name}}
+    </div>
+    <div card-body>
+      <span>Cantidad disponible: {{seller.amount}}</span>
+      <span>Precio unitario: {{seller.price | currency:'EUR':true}}</span>
+      <i [class]="seller.amount | available" aria-hidden="true"></i>
+    </div>
+  </collapsible-card>
 </div>
 
