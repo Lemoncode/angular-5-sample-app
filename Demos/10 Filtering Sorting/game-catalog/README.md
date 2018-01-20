@@ -33,13 +33,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ### 1. First we have to make some changes on `game-sellers.componet.*`
 
 ```diff html
-<div>
-  <h2>Game Details</h2>
-  <div class="row">
-    <div class="col-md-2">
-      <h3>Sellers</h3>
-    </div>
-    <div class="col-md-8">
+<h2>Game Details</h2>
+<div class="row">
+  <div class="col-2">
+    <h3>Sellers</h3>
+  </div>
+  <div class="col-8">
+-    <!-- TODO: Add options for filtering -->
 +      <div class="btn-group btn-group-sm">
 +        <button class="btn btn-default" [class.active]="sortBy==='asc'" (click)="sortBy='asc'">
 +          Precio mayor
@@ -52,22 +52,30 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 +        <button class="btn btn-default" [class.active]="filterBy==='all'" (click)="filterByBy='all'">
 +          Todos
 +        </button>
-+        <button class="btn btn-default" [class.active]="sortBy==='asc'" (click)="filterBy='available'">
++        <button class="btn btn-default" [class.active]="filterBy==='available'" (click)="filterBy='available'">
 +          Disponibles
 +        </button>
 +      </div>
-    </div>
-    <div class="col-md-2">
-      <a (click)="toggleAddSeller()">Add Seller</a>
-    </div>
-    <app-game-sellers *ngIf="!addMode" [gameName]="gameName" [sellers]="sellers"></app-game-sellers>
-    <app-create-seller *ngIf="addMode"></app-create-seller>
+  </div>
+  <div class="col-2">
+      <a (click)="toggleAddSeller()">Add seller</a>
   </div>
 </div>
+<div class="row">
+  <div class="col" *ngIf="!addMode">
+    <h2>{{gameName}}</h2>
+    <div *ngFor="let seller of sellers">
+      <app-seller-details [seller]="seller"></app-seller-details>
+    </div>
+  </div>
+</div>
+<app-create-seller *ngIf="addMode"></app-create-seller>
+
+
 ```
 ```diff typescript
 ...
-export class GameSellersDetailsComponent implements OnInit {
+export class GameSellersComponent implements OnInit {
   gameName: string;
   sellers: ISeller[];
   addMode = false;
@@ -80,7 +88,7 @@ export class GameSellersDetailsComponent implements OnInit {
 
 ```
 
-### 2. Now we are going to create a neww componente under `src/app/seller`, `seller-list.component.*`
+### 2. Now we are going to create a new componente under `src/app/seller`, `seller-list.component.*`
 
 * Open `bash` in `src/app/seller`
 
@@ -112,43 +120,44 @@ export class SellerListComponent {
 ### 3. Now we have to update `game-sellers.component.html`, in order to use this new component.
 
 ```diff html
-<div>
-  <h2>Game Details</h2>
-  <div class="row">
-    <div class="col-md-2">
-      <h3>Sellers</h3>
+<h2>Game Details</h2>
+<div class="row">
+  <div class="col-2">
+    <h3>Sellers</h3>
+  </div>
+  <div class="col-8">
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-default" [class.active]="sortBy==='asc'" (click)="sortBy='asc'">
+        Precio mayor
+      </button>
+      <button class="btn btn-default" [class.active]="sortBy==='desc'" (click)="sortBy='desc'">
+        Precio menor
+      </button>
     </div>
-    <div class="col-md-8">
-      <div class="btn-group btn-group-sm">
-        <button class="btn btn-default" [class.active]="sortBy==='asc'" (click)="sortBy='asc'">
-          Precio mayor
-        </button>
-        <button class="btn btn-default" [class.active]="sortBy==='desc'" (click)="sortBy='desc'">
-          Precio menor
-        </button>
-      </div>
-      <div class="btn-group btn-group-sm">
-        <button class="btn btn-default" [class.active]="filterBy==='all'" (click)="filterByBy='all'">
-          Todos
-        </button>
-        <button class="btn btn-default" [class.active]="sortBy==='asc'" (click)="filterBy='available'">
-          Disponibles
-        </button>
-      </div>
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-default" [class.active]="filterBy==='all'" (click)="filterByBy='all'">
+        Todos
+      </button>
+      <button class="btn btn-default" [class.active]="filterBy==='available'" (click)="filterBy='available'">
+        Disponibles
+      </button>
     </div>
-    <div class="col-md-2">
-      <a (click)="toggleAddSeller()">Add Seller</a>
-    </div>
-    <div *ngIf="!addMode">
-      <h2>{{gameName}}</h2>
-+      <app-seller-list [sellers]="sellers"></app-seller-list>
--      <div *ngFor="let seller of sellers">
--        <app-seller-details [seller]="seller"></app-seller-details>
--      </div>
-    </div>
-    <app-create-seller *ngIf="addMode"></app-create-seller>
+  </div>
+  <div class="col-2">
+    <a (click)="toggleAddSeller()">Add seller</a>
   </div>
 </div>
+<div class="row">
+  <div class="col" *ngIf="!addMode">
+    <h2>{{gameName}}</h2>
++    <app-seller-list [sellers]="sellers"></app-seller-list>
+-    <div *ngFor="let seller of sellers">
+-      <app-seller-details [seller]="seller"></app-seller-details>
+-    </div>
+  </div>
+</div>
+<app-create-seller *ngIf="addMode"></app-create-seller>
+
 
 ```
 * Check that everything it's working.
@@ -177,7 +186,8 @@ import { ISeller } from '../../models/seller.model';
   selector: 'app-seller-list',
   templateUrl: './seller-list.component.html'
 })
-export class SellerListComponent {
++export class SellerListComponent implements OnChanges {
+-export class SellerListComponent {
   @Input() sellers: ISeller[];
 +  @Input() filterBy: string;
 +  @Input() sortBy: string;

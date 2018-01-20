@@ -11,6 +11,8 @@ export class GameSellersComponent implements OnInit {
   gameName: string;
   sellers: ISeller[];
   addMode = false;
+  filterBy = 'all';
+  sortBy = 'asc';
   constructor(private route: ActivatedRoute, private gameStockService: GameStockService) {}
 
   toggleAddSeller() {

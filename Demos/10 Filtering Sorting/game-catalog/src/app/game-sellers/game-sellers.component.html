@@ -4,18 +4,31 @@
     <h3>Sellers</h3>
   </div>
   <div class="col-8">
-    <!-- TODO: Add options for filtering -->
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-default" [class.active]="sortBy==='asc'" (click)="sortBy='asc'">
+        Precio mayor
+      </button>
+      <button class="btn btn-default" [class.active]="sortBy==='desc'" (click)="sortBy='desc'">
+        Precio menor
+      </button>
+    </div>
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-default" [class.active]="filterBy==='all'" (click)="filterBy='all'">
+        Todos
+      </button>
+      <button class="btn btn-default" [class.active]="filterBy==='available'" (click)="filterBy='available'">
+        Disponibles
+      </button>
+    </div>
   </div>
   <div class="col-2">
-      <a (click)="toggleAddSeller()">Add seller</a>
+    <a (click)="toggleAddSeller()">Add seller</a>
   </div>
 </div>
 <div class="row">
   <div class="col" *ngIf="!addMode">
     <h2>{{gameName}}</h2>
-    <div *ngFor="let seller of sellers">
-      <app-seller-details [seller]="seller"></app-seller-details>
-    </div>
+    <app-seller-list [sortBy]="sortBy" [filterBy]="filterBy" [sellers]="sellers"></app-seller-list>
   </div>
 </div>
 <app-create-seller *ngIf="addMode"></app-create-seller>
