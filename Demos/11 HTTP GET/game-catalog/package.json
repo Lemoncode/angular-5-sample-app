@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node ./server/index.js | ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -23,6 +23,7 @@
     "@angular/platform-server": "^5.1.1",
     "@angular/router": "^5.1.1",
     "core-js": "^2.4.1",
+    "express": "^4.16.2",
     "font-awesome": "^4.7.0",
     "rxjs": "^5.5.5",
     "zone.js": "^0.8.4"

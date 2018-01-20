@@ -3,6 +3,7 @@ import { SellerCategoryService } from '../../services/sellerCategory.service';
 import { ISellerCategory } from '../../models/sellerCategory.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { forEach } from '@angular/router/src/utils/collection';
+import { Observable } from 'rxjs/Observable';
 
 const nameValid = (control: FormControl): { [key: string]: any } => {
   const firstLetter = control.value.toString()[0];
@@ -67,26 +68,32 @@ export class CreateSellerComponent implements OnInit {
       remarks: this.remarks
     });
     this.tax.disable();
-    const categories: ISellerCategory[] = this.sellerCategoryService.getSellerCategories();
-    this.categoryLookupCollection = categories
-      .map(
-        (c) => ({
-          id: c.id,
-          name: c.name
-        })
-      );
+    this.resolveLookupEntities();
+  }
 
-    let taxesNormalized: Array<any> = [];
-    categories.forEach((c) => {
-      const taxesByCategoryTemp = c.taxes
-        .map((t) => ({
-          categoryId: c.id,
-          id: t.id,
-          name: t.name
-        }));
-      taxesNormalized = taxesNormalized.concat(taxesByCategoryTemp);
-    });
-    this.taxesByCategory = taxesNormalized;
+  private resolveLookupEntities() {
+    this.sellerCategoryService.getSellerCategories()
+      .subscribe((categories) => {
+        this.categoryLookupCollection = categories
+          .map(
+          (c) => ({
+            id: c.id,
+            name: c.name
+          })
+          );
+
+        let taxesNormalized: Array<any> = [];
+        categories.forEach((c) => {
+          const taxesByCategoryTemp = c.taxes
+            .map((t) => ({
+              categoryId: c.id,
+              id: t.id,
+              name: t.name
+            }));
+          taxesNormalized = taxesNormalized.concat(taxesByCategoryTemp);
+        });
+        this.taxesByCategory = taxesNormalized;
+      }, (err) => console.log(err));
   }
 
 }
