@@ -1,0 +1,23 @@
+<!-- <input type="text"
+[ngModel]="username"/>
+
+<p>Hello {{username}}</p> -->
+
+<form #templateForm="ngForm" (ngSubmit)="onSubmitTemplateBased(templateForm.value)" novalidate>
+  <p>
+      <label>First Name:</label>
+      <input type="text" (ngModel)="firstName" name="firstName" required>
+  </p>
+  <p>
+      <label>Password:</label>
+      <input type="password" (ngModel)="password" name="password" required>
+  </p>
+  <p>
+      <button
+      type="submit"
+      [disabled]="!templateForm.valid"
+      type="submit">
+        Submit
+      </button>
+  </p>
+</form>
