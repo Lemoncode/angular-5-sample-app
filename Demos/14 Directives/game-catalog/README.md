@@ -33,14 +33,14 @@ Starts from previous demo.
 
 ## Steps
 
-1. Create a new file on common folder, messageToastr.drirective.ts. And put this code inside.
+### 1. Create a new file on `src/app/common` folder, `messageToastr.drirective.ts`.
 
+```typescript
 import { Directive, ElementRef } from '@angular/core';
 
 @Directive({
     selector: '[message-toastr]' 
 })
-
 export class MessageToastrDirective {
     private element: HTMLElement;
 
@@ -49,71 +49,118 @@ export class MessageToastrDirective {
         console.log(this.element);
     }
 }
+```
 
-2. Lets add the directive to the module.
-....
-import { MessageToastrDirective } from './common/messageToastr.directive';
+### 2. Lets add the directive to the module.
+```diff
++import { MessageToastrDirective } from './common/message-toastr.directive';
 ....
 
 @NgModule({
   declarations: [
     .... 
-    MessageToastrDirective
++    MessageToastrDirective
   ],
   ....
 })
-....
+```
 
-3. Now lets check that our directive it is wiring up to the html node where is placed. Open customers-list.component.html and write message-toastr on app-customer-summary.
+### 3. Now lets check that our directive it is wiring up to the html node where is placed. Open `game-list.component.html`, and modify as follows:
 
+```diff
 <div class="container">
   <h1>
     {{title}}
   </h1>
-  <div class="customers-container" *ngIf="show">
-    <div *ngFor="let customer of customers" [routerLink]="['/customers', customer.id]">
-      <app-customer-summary message-toastr (customerChange)="customerChangeHandler($event)" [customer]=customer>
-      </app-customer-summary>
+  <div class="games-container">
+    <div *ngFor="let game of games" [routerLink]="['/games', game.name]">
+-      <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
++      <app-game-summary appMessageToastr (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
     </div>
   </div>
 </div>
 
-Open console on browser and watch results.
+```
 
-4. Now we are going to handle the click on the node element, where the directive is placed.
+* Open console on browser and watch results.
 
-import { Directive, ElementRef, OnInit } from '@angular/core';
-...
+### 4. Now we are going to handle the click on the node element, where the directive is placed.
 
-export class MessageToastrDirective implements OnInit {
-    ...
-    ngOnInit() {
-        this.element.addEventListener('click', (evt) => {
-            console.log(evt);
-        });
+```diff
+-import { Directive, ElementRef } from '@angular/core';
++import { Directive, ElementRef, OnInit } from '@angular/core';
+
+@Directive({
+  selector: '[appMessageToastr]'
+})
+-export class MessageToastrDirective {
++export class MessageToastrDirective implements OnInit {  
+  private element: HTMLElement;
+
+  constructor(ref: ElementRef) {
+    this.element = ref.nativeElement;
+-    console.log(this.element);
+  }
++
++  ngOnInit(): void {
++    this.element.addEventListener('click', (evt) => {
++      console.log(evt);
++    });
++  }
+}
+```
+### 5. Now lets add a new service that will handle show a message to the user when the directive responses to the click event. Create the following code `src/app/common/toastr.service.ts`
+
+```typescript
+import { InjectionToken } from '@angular/core';
+
+export const TOASTR_TOKEN = new InjectionToken<string>('toastr');
+declare let toastr; // Try with const
+
+export class Toastr {
+  success(message: string, title?: string): void {
+    if (title) {
+      toastr.success(message, title);
+    } else {
+      toastr.success(message);
     }
+  }
+  info(message: string, title?: string): void {
+    if (title) {
+      toastr.info(message, title);
+    } else {
+      toastr.info(message);
+    }
+  }
+  warning(message: string, title?: string): void {
+    if (title) {
+      toastr.warning(message, title);
+    } else {
+      toastr.warning(message);
+    }
+  }
+  error(message: string, title?: string): void {
+    if (title) {
+      toastr.error(message, title);
+    } else {
+      toastr.error(message);
+    }
+  }
 }
 
-5. Now lets add a new service that will handle show a message to the user when the directive responses to the click event.
+```
 
-import { OpaqueToken } from '@angular/core';
+* This is just a wrapper around the toastr library.
 
-export let TOASTR_TOKEN = new OpaqueToken('toastr');
-export interface Toastr {
-    success(message: string, title?: string): void;
-    info(message: string, title?: string): void;
-    warning(message: string, title?: string): void;
-    error(message: string, title?: string): void;
-}
+### 6. Now we have to bring toastr, so lets import fron npm
 
-This is just a wrapper around the toastr library.
+```bash
+$npm install toastr --save
+```
 
-6. Now we have to bring toastr, so lets import fron npm
+### 7. Before register this toastr as service we have to do a slightly modification in `angular-CLI.json`
 
-$npm install jquery toastr --save
-
-7. Before register this toastr as service we have to do a slightly modification in angular-CLI.json
-
+```diff
 {
   ....
   "apps": [
@@ -121,110 +168,165 @@ $npm install jquery toastr --save
       ...
       "styles": [
         "styles.css",
-        "../node_modules/toastr/build/toastr.css"
++        "../node_modules/toastr/build/toastr.css"
       ],
       "scripts": [
-        "../node_modules/jquery/dist/jquery.js",  
-        "../node_modules/toastr/build/toastr.min.js"
++        "../node_modules/jquery/dist/jquery.js",  
++        "../node_modules/toastr/build/toastr.min.js"
       ],
       ....
     }
   ],
   ....
 }
+```
+* We have to add jquery since toastr has a dependency with it.
+* Try out => $ng build
+* This way we check out that everything it's ok. 
 
-Try out => $ng build
+### 8. Now we have to register in `app.module.ts`
 
-This way we check out that everything it's ok. 
+```diff
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-8. Now we can create the class that will be a wrapper around the toastr library
+import { GameStockService } from './services/gameStock.service';
+import { SellerCategoryService } from './services/sellerCategory.service';
+import { GameRouterActivatorService } from './services/game-router-activator.service';
+import { CHECKDIRTY_TOKEN, checkDirtyState } from './services/checkDirty.service';
++import { TOASTR_TOKEN, Toastr } from './common/toastr.service';
+import { appRoutes } from './app.routes';
 
-import { Injectable } from '@angular/core';
-declare let toastr;
+import { AppComponent } from './app.component';
+import { GameSummaryComponent } from './game/game-summary.component';
+import { GameSellersComponent } from './game-sellers/game-sellers.component';
+import { CreateGameComponent } from './game/create-game/create-game.component';
+import { GameListComponent } from './game/game-list/game-list.component';
+import { CreateSellerComponent } from './seller/create-seller/create-seller.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { Error404Component } from './errors/404.component';
+import { SellerDetailsComponent } from './seller/seller-details/seller-details.component';
+import { AvailablePipe } from './pipes/available.pipe';
+import { SellerListComponent } from './seller/seller-list/seller-list.component';
+import { CollapsibleCardComponent } from './common/collapsible-card.component';
+import { MessageToastrDirective } from './common/message-toastr.directive';
 
-@Injectable()
-export class Toastr {
-    success(message: string, title?: string): void {
-        if(title) {
-            toastr.success(message, title);
-        } else {
-            toastr.success(message);
-        }
-    }
-    info(message: string, title?: string): void {
-        if(title) {
-            toastr.info(message, title);
-        } else {
-            toastr.info(message);
-        }
-    }
-    warning(message: string, title?: string): void {
-        if(title) {
-            toastr.warning(message, title);
-        } else {
-            toastr.warning(message);
-        }
-    }
-    error(message: string, title?: string): void {
-        if(title) {
-            toastr.error(message, title);
-        } else {
-            toastr.error(message);
-        }
-    }
-}
+@NgModule({
+  declarations: [
+    AppComponent,
+    GameSummaryComponent,
+    GameSellersComponent,
+    CreateGameComponent,
+    GameListComponent,
+    CreateSellerComponent,
+    NavbarComponent,
+    Error404Component,
+    SellerDetailsComponent,
+    AvailablePipe,
+    SellerListComponent,
+    CollapsibleCardComponent,
+    MessageToastrDirective
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    RouterModule.forRoot(appRoutes),
+    ReactiveFormsModule
+  ],
+  providers: [
+    GameStockService,
+    SellerCategoryService,
+    GameRouterActivatorService,
+    {
+      provide: CHECKDIRTY_TOKEN,
+      useValue: checkDirtyState
+    },
++    {
++      provide: TOASTR_TOKEN,
++      useClass: Toastr
++    }
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
 
-9. Now we can use it inside our directive
+```
 
-import { Directive, ElementRef, OnInit, Inject, Input } from '@angular/core';
-import { Toastr } from './toastr.service'
+### 9. Now we can use as a service in our derective
 
+```diff
+import { Directive, ElementRef, OnInit, Inject } from '@angular/core';
++import { TOASTR_TOKEN, Toastr } from './toastr.service';
 
 @Directive({
-    selector: '[message-toastr]' 
+  selector: '[appMessageToastr]'
 })
-
 export class MessageToastrDirective implements OnInit {
-    private element: HTMLElement;
-    @Input('message-toastr') title: string;
-    
-    constructor(ref: ElementRef, private toastr: Toastr) {
-        this.element = ref.nativeElement;
-    }
+  private element: HTMLElement;
 
-    ngOnInit() {
-        this.element.addEventListener('click', (evt) => {
-            // TODO: Study a way to decouple.
-            const rowElement = this.element.querySelector('.row');
-            const firstName = rowElement.querySelector('.firstName').innerHTML;
-            const lastName = rowElement.querySelector('.lastName').innerHTML; 
-            const message = `Loaded profile ${lastName}, ${firstName}`;
-            this.toastr.success(message, this.title);
-        });
-    }
+-  constructor(ref: ElementRef) {
++  constructor(ref: ElementRef, @Inject(TOASTR_TOKEN) private toastr: Toastr) {
+    this.element = ref.nativeElement;
+  }
+
+  ngOnInit(): void {
+    this.element.addEventListener('click', (evt) => {
+      console.log(evt);
+    });
+  }
 }
+```
 
-10. To get this working we have to modify customer-summary.component.html. Note if we get
 
-<div class="well" (click)="selectCustomer(customerId)">
+### 10. Let's introduce a couple of classes to make easier show the toastr. Open `game-summary.component.html`.
+
+```diff
+<div class="card card-block bg-faded" (click)="selectedGame(gameName)">
   <div class="row">
-    <input type="text" #customerId [value]=customer.id [hidden]=true/>
-    <div class="col-md-3">
-      <label>First Name:</label>
-      <span class="firstName">{{customer.firstName}}</span>
+    <input type="text" #gameName [value]=game.name [hidden]=true>
+    <div class="col">
+      <label>Name:</label>
+-      <span>{{game.name}}</span>
++      <span class="gameName">{{game.name}}</span>
     </div>
-    <div class="col-md-3">
-      <label>Last Name:</label>
-      <span class="lastName">{{customer.lastName}}</span>
+    <div class="col">
+      <label>Years from release:</label>
+      <span>{{game.getYearsFromRelease()}}</span>
     </div>
-    <div class="col-md-3">
-      <label>Age:</label>
-      <span>{{customer.getAge()}}</span>
-    </div>
-    <div class="col-md-3">
-      <div class="portrait">
-        <img class="img-reponsive" alt="Customer Image" [src]="customer.imageUrl"/>
-      </div>
+    <div class="col">
+      <img class="img-fluid" [src]="game.imageUrl" alt="game image">
     </div>
   </div>
 </div>
+
+```
+
+### 11. Now we only have to modify the directive as follows
+
+```diff
+import { Directive, ElementRef, OnInit, Inject } from '@angular/core';
+import { TOASTR_TOKEN, Toastr } from './toastr.service';
+
+@Directive({
+  selector: '[appMessageToastr]'
+})
+export class MessageToastrDirective implements OnInit {
+  private element: HTMLElement;
+
+  constructor(ref: ElementRef, @Inject(TOASTR_TOKEN) private toastr: Toastr) {
+    this.element = ref.nativeElement;
+  }
+
+  ngOnInit(): void {
+    this.element.addEventListener('click', (evt) => {
++      const rowElement = this.element.querySelector('.row');
++      const gameName = this.element.querySelector('.gameName').innerHTML;
++      this.toastr.success(`Selected game: ${gameName}`);
+    });
+  }
+}
+```

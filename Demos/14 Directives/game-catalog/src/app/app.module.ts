@@ -8,6 +8,7 @@ import { GameStockService } from './services/gameStock.service';
 import { SellerCategoryService } from './services/sellerCategory.service';
 import { GameRouterActivatorService } from './services/game-router-activator.service';
 import { CHECKDIRTY_TOKEN, checkDirtyState } from './services/checkDirty.service';
+import { TOASTR_TOKEN, Toastr } from './common/toastr.service';
 import { appRoutes } from './app.routes';
 
 import { AppComponent } from './app.component';
@@ -22,6 +23,7 @@ import { SellerDetailsComponent } from './seller/seller-details/seller-details.c
 import { AvailablePipe } from './pipes/available.pipe';
 import { SellerListComponent } from './seller/seller-list/seller-list.component';
 import { CollapsibleCardComponent } from './common/collapsible-card.component';
+import { MessageToastrDirective } from './common/message-toastr.directive';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { CollapsibleCardComponent } from './common/collapsible-card.component';
     SellerDetailsComponent,
     AvailablePipe,
     SellerListComponent,
-    CollapsibleCardComponent
+    CollapsibleCardComponent,
+    MessageToastrDirective
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,10 @@ import { CollapsibleCardComponent } from './common/collapsible-card.component';
     {
       provide: CHECKDIRTY_TOKEN,
       useValue: checkDirtyState
+    },
+    {
+      provide: TOASTR_TOKEN,
+      useClass: Toastr
     }
   ],
   bootstrap: [AppComponent]

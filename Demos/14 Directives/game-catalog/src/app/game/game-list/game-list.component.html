@@ -4,7 +4,7 @@
   </h1>
   <div class="games-container">
     <div *ngFor="let game of games" [routerLink]="['/games', game.name]">
-        <app-game-summary (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
+      <app-game-summary appMessageToastr (gameChange)="gameChangeHandler($event)" [game]=game></app-game-summary>
     </div>
   </div>
 </div>
