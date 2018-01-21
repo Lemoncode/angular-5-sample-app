@@ -1,0 +1,16 @@
+<div class="card card-block bg-faded" (click)="selectedGame(gameName)">
+  <div class="row">
+    <input type="text" #gameName [value]=game.name [hidden]=true>
+    <div class="col">
+      <label>Name:</label>
+      <span class="gameName">{{game.name}}</span>
+    </div>
+    <div class="col">
+      <label>Years from release:</label>
+      <span>{{game.getYearsFromRelease()}}</span>
+    </div>
+    <div class="col">
+      <img class="img-fluid" [src]="game.imageUrl" alt="game image">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<h1>
+  {{title}}
+</h1>
+
+<div class="container">
+  <div *ngFor="let game of games">
+      <app-game-summary [game]=game></app-game-summary>
+  </div>
+</div>
