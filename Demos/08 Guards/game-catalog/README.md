@@ -172,7 +172,9 @@ export const appRoutes: Routes = [
   { path: '', redirectTo: '/games', pathMatch: 'full' }
 ];
 
-``` 
+```
+* Tests the route with an id that does not exist.
+
 * All of this to watch if we can navigate to a page depending on the navigation params, but we can do that the user does not leave a page until some kind of action has been made.
 
 ### 6. Let's modify `create-game.component.*`, to achieve this goal.

@@ -45,8 +45,8 @@ ng generate component game-list
 * Remove `games-list.component.css`
 * Remove `games-list.component.spec.ts`
 
-* It's the same html as `app.component.hml`, but without the form, and the button that hides content.
-```html
+>NOTE: It's the same html as `app.component.hml`, but without the form, and the button that hides content.
+```html games-list.component.html
 <div class="container">
   <h1>
     {{title}}
@@ -60,8 +60,9 @@ ng generate component game-list
 </div>
 
 ```
-* It's the same as `app.component.ts`, but without the property `show` and the method `createGameEventHandler`, changing references route and removing styles.
-```typescript
+>NOTE: It's the same as `app.component.ts`, but without the property `show` and the method `createGameEventHandler`, changing references route and removing styles.
+
+```typescript games-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { GameStockService } from '../../services/gameStock.service';
 import { Game } from '../../models/game.model';

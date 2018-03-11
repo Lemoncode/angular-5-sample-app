@@ -49,7 +49,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 +        </button>
 +      </div>
 +      <div class="btn-group btn-group-sm">
-+        <button class="btn btn-default" [class.active]="filterBy==='all'" (click)="filterByBy='all'">
++        <button class="btn btn-default" [class.active]="filterBy==='all'" (click)="filterBy='all'">
 +          Todos
 +        </button>
 +        <button class="btn btn-default" [class.active]="filterBy==='available'" (click)="filterBy='available'">
@@ -135,7 +135,7 @@ export class SellerListComponent {
       </button>
     </div>
     <div class="btn-group btn-group-sm">
-      <button class="btn btn-default" [class.active]="filterBy==='all'" (click)="filterByBy='all'">
+      <button class="btn btn-default" [class.active]="filterBy==='all'" (click)="filterBy='all'">
         Todos
       </button>
       <button class="btn btn-default" [class.active]="filterBy==='available'" (click)="filterBy='available'">

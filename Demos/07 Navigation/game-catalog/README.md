@@ -178,7 +178,25 @@ export class CreateGameComponent {
 
 ### 5. With this on place we are going to create an new route, to get the sellers related with one game. Let's register a new route for that purpose. In `app.routes.ts`
 
-* NOTE: Order the routes in the same way.
+```diff app.routes.ts
+import { Routes } from '@angular/router';
+import { GameListComponent } from './game/game-list/game-list.component';
+import { CreateGameComponent } from './game/create-game/create-game.component';
+import { CreateSellerComponent } from './seller/create-seller/create-seller.component';
++import { GameSellersComponent } from './game/game-sellers/game-sellers.component';
+
+export const appRoutes: Routes = [
+  { path: '', redirectTo: '/games', pathMatch: 'full' },
+  { path: 'games/new', component: CreateGameComponent },
+  { path: 'games', component: GameListComponent },
++  { path: 'games/:id', component: GameSellersComponent },
+  { path: 'seller/new', component: CreateSellerComponent }
+];
+
+
+```
+
+>NOTE: Order the routes in the same way.
 
 ```typescript
 import { Routes } from '@angular/router';
@@ -244,7 +262,7 @@ export const appRoutes: Routes = [
 ```diff
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-+import { GameStockService } from '../services/gameStock.service';
++import { GameStockService } from '../../services/gameStock.service';
 
 @Component({
   selector: 'app-game-sellers-details',
@@ -330,7 +348,7 @@ import { GameStockService } from '../services/gameStock.service';
   selector: 'app-game-sellers',
   templateUrl: './game-sellers.component.html'
 })
-export class GameSellersDetailsComponent implements OnInit {
+export class GameSellersComponent implements OnInit {
 +  gameName: string;
 +  sellers: ISeller[];
 +  addMode = false;
