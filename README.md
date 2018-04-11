@@ -1,3 +1,6 @@
+# angular-5-sample-app
+
+Set of angular 5 incremental samples.
 
 # About Lemoncode
 
