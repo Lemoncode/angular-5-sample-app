@@ -42,8 +42,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ```bash
 ng generate component game-list
 ```
-* Remove `games-list.component.css`
-* Remove `games-list.component.spec.ts`
+* Remove `game-list.component.css`
+* Remove `game-list.component.spec.ts`
 
 * It's the same html as `app.component.hml`, but without the form, and the button that hides content.
 ```html
@@ -115,10 +115,10 @@ export const appRoutes: Routes = [
 
 ```diff
 import { Routes } from '@angular/router';
-+import { GamesListComponent } from './game/games-list/games-list.component';
++import { GameListComponent } from './game/game-list/game-list.component';
 
 export const appRoutes: Routes = [
-+  { path: 'games', component: GamesListComponent }
++  { path: 'games', component: GameListComponent }
 ];
 ```
 

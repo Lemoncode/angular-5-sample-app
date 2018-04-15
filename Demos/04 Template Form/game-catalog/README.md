@@ -30,7 +30,42 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## NOTE: In this demo we are going to create a game and get inserted in our list of games. This will be achive by our first (templated) form.
 
 ## Steps.
-### 1. Let's create the `create-game.component.*`, inside game folder.
+### 1. First we have to add the related angular module
+
+```diff
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
++import { FormsModule } from '@angular/forms';
+
+import { GameStockService } from './services/gameStock.service';
+
+import { AppComponent } from './app.component';
+import { GameSummaryComponent } from './game/game-summary.component';
+import { GameSellersComponent } from './game/game-sellers/game-sellers.component';
+import { CreateGameComponent } from './game/create-game/create-game.component';
+
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    GameSummaryComponent,
+    GameSellersComponent,
+    CreateGameComponent
+  ],
+  imports: [
+    BrowserModule,
++    FormsModule
+  ],
+  providers: [
+    GameStockService
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+### 2. Let's create the `create-game.component.*`, inside game folder.
 
 * Open `bash` in `src/app/game`
 ```bash
@@ -96,7 +131,7 @@ export class CreateGameComponent {
 
 }
 ```
-### 2. Now let's add some validations to this form. `name` and `datarealase` are going to be require fields.
+### 3. Now let's add some validations to this form. `name` and `datarealase` are going to be require fields.
 
 ```diff
 ....
@@ -137,7 +172,7 @@ export class CreateGameComponent {
 
 ```
 
-### 3. At this point let's handle the submitted form in our component.
+### 4. At this point let's handle the submitted form in our component.
 
 ```diff
 <div>
@@ -191,7 +226,7 @@ export class CreateGameComponent {
 ```
 * Show the results changing the control focus, on each control (name and daterelease).
 
-### 4. Now we are going to make the imageUrl required and with an url diretion
+### 5. Now we are going to make the imageUrl required and with an url diretion
 
 ```diff
 ...
@@ -222,7 +257,7 @@ export class CreateGameComponent {
 ```
 * Show the results changing the control focus, on each control, and typing invalid url.
 
-### 5. Now let's add a button to submit form.
+### 6. Now let's add a button to submit form.
 
 ```diff
 ....
@@ -231,7 +266,7 @@ export class CreateGameComponent {
 ```
 * Open console to show the results on console.
 
-### 6. Now we want to give some extra information to our user, when hovers the submit button. We want the errors get displayed.
+### 7. Now we want to give some extra information to our user, when hovers the submit button. We want the errors get displayed.
 
 ```diff
 +<span (mouseenter)="mouseoverLogin=true" (mouseleave)="mouseoverLogin=false">
@@ -308,7 +343,7 @@ export class CreateGameComponent {
 </div>
 ```
 
-### 7. Now with everything on place, let's modify our `create-game.component` to send a custom event when we submit the form.
+### 8. Now with everything on place, let's modify our `create-game.component` to send a custom event when we submit the form.
 
 ```diff
 -import { Component } from '@angular/core';
@@ -329,7 +364,7 @@ export class CreateGameComponent {
   }
 }
 ```
-### 8. Now we have to modify `app.component.*` to handle the event. 
+### 9. Now we have to modify `app.component.*` to handle the event. 
 
 * NOTE: We have to modify `GameStockService` with a new method.
 ``` diff gameStock.service.ts

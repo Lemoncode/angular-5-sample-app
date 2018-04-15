@@ -129,7 +129,7 @@ const GAMES: Game[] = [
   new Game(
     'Sonic',
     '26 June 1981',
-    'https://www-sonicthehedgehog-com-content.s3.amazonaws.com/test/Sonic_Mania_Block_3_video_1_2.jpg',
+    'https://i.ytimg.com/vi/dfFd7Bu6xnc/hqdefault.jpg',
   ),
 ];
 
@@ -204,7 +204,7 @@ export class AppComponent implements OnInit {
 -      new Game(
 -        'Sonic',
 -        '26 June 1981',
--        'https://www-sonicthehedgehog-com-content.s3.amazonaws.com/test/Sonic_Mania_Block_3_video_1_2.jpg',
+-        'https://i.ytimg.com/vi/dfFd7Bu6xnc/hqdefault.jpg',
 -      ),
 -    ];
 +    this.games = this.gameStockService.getGames();
@@ -299,9 +299,8 @@ export class GameSellersComponent {
 ### 8.We have to get notified when a game is selected (click on it), so we are going to generate a new custom event, in `game-summary.component.ts\game-summary.component.html`, so its parent get notified when the game has been clicked. 
 
 ```diff
-+<div class="card card-block bg-faded" (click)="selectedGame(gameName)">
++<div class="card card-block bg-faded" (click)="selectedGame(game.name)">
   <div class="row">
-+    <input type="text" #gameName [value]=game.name [hidden]=true>
     <div class="col">
       <label>Name:</label>
       <span>{{game.name}}</span>
@@ -327,12 +326,11 @@ import { Game } from '../models/game.model';
 export class GameSummaryComponent {
   @Input() game: Game;
 
-  selectedGame(gameNameElement: HTMLInputElement) {
-    console.log(gameNameElement);
+  selectedGame(gameName: string) {
+    console.log(gameName);
   }
 }
 ```
-* Note that we are passing a reference to the input element. 
 * Show current results on browser.
 
 ### 9. Now we are going to notify the parent to handle, the selected game. In `game-summary.component.ts`, we introduce the following changes:
@@ -350,9 +348,9 @@ export class GameSummaryComponent {
   @Input() game: Game;
 +  @Output() gameChange: EventEmitter<string> = new EventEmitter<string>();
 +  
-  selectedGame(gameNameElement: HTMLInputElement) {
+  selectedGame(gameName: string) {
 -    console.log(gameNameElement.value);
-+   this.gameChange.emit(gameNameElement.value);
++   this.gameChange.emit(gameName);
   }
 }
 ```
