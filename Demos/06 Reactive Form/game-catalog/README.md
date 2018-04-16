@@ -140,7 +140,7 @@ export interface ITax {
 ```
 
 
-```typescript sellerCategory.model
+```typescript seller-category.model
 import { ITax } from './tax.model';
 
 export interface ISellerCategory {
@@ -149,7 +149,7 @@ export interface ISellerCategory {
   taxes: Array<ITax>;
 }
 ```
-### 6. No we are going to create a service that provides data related with `sellerCategory.model` and `tax.model`. In folder `services`, we create `sellerCategory.service.ts`
+### 6. No we are going to create a service that provides data related with `seller-category.model` and `tax.model`. In folder `services`, we create `seller-category.service.ts`
 
 ```typescript
 import { Injectable } from '@angular/core';
@@ -253,8 +253,8 @@ export class AppModule { }
 
 ```diff typescript
 import { Component, OnInit } from '@angular/core';
-+import { SellerCategoryService } from '../../services/sellerCategory.service';
-+import { ISellerCategory } from '../../models/sellerCategory.model';
++import { SellerCategoryService } from '../../services/seller-category.service';
++import { ISellerCategory } from '../../models/seller-category.model';
 
 @Component({
     selector: 'app-create-seller',

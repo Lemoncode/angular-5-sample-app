@@ -94,9 +94,9 @@ export class NavbarComponent {}
 ```
 * Test the app and the navigation.
 
-### 4. Now if we add a new game it does not be reflected on `games-list.component.ts`, let's fix this.
+### 4. Now if we add a new game it does not be reflected on `game-list.component.ts`, let's fix this.
 
-* Remove code from `games-list.component.ts`
+* Remove code from `game-list.component.ts`
 
 ```diff
 import { Component, OnInit } from '@angular/core';
@@ -108,7 +108,7 @@ import { GameStockService } from '../services/gameStock.service';
   selector: 'app-games-list',
   templateUrl: './games-list.component.html'
 })
-export class GamesListComponent implements OnInit {
+export class GameListComponent implements OnInit {
   title = 'User Interactions Demo';
   games: Game[];
   selectedGameInfo: string;
@@ -197,7 +197,7 @@ export const appRoutes: Routes = [
 
 
 ```
-### 6. Now we can add the routerLink in `games-list.component.html` to move to the desire `game-sellers-details.component`.
+### 6. Now we can add the routerLink in `game-list.component.html` to move to the desire `game-sellers.component`.
 
 ```diff
 <div class="container">
@@ -244,7 +244,7 @@ export const appRoutes: Routes = [
 ```diff
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-+import { GameStockService } from '../services/gameStock.service';
++import { GameStockService } from '../../services/gameStock.service';
 
 @Component({
   selector: 'app-game-sellers-details',
@@ -324,7 +324,7 @@ export class GameSellersDetailsComponent implements OnInit {
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GameStockService } from '../services/gameStock.service';
-+import { ISeller } from '../models/seller.model';
++import { ISeller } from '../../models/seller.model';
 
 @Component({
   selector: 'app-game-sellers',

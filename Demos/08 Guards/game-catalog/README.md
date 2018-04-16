@@ -158,15 +158,15 @@ import { Routes } from '@angular/router';
 import { GamesListComponent } from './game/games-list.component';
 import { CreateGameComponent } from './game/create-game.component';
 import { CreateSellerComponent } from './game/seller-details/create-seller.component';
-import { GameSellersDetailsComponent } from './game/seller-details/game-sellers-details.component';
+import { GameSellersComponent } from './game/seller-details/game-sellers-details.component';
 +import { Error404Component } from './errors/404.component';
 +import { GameRouterActivatorService } from './services/game-router-activator.service';
 
 export const appRoutes: Routes = [
   { path: 'games/new', component: CreateGameComponent },
   { path: 'games', component: GamesListComponent },
--  { path: 'games/:id', component: GameSellersDetailsComponent },
-+  { path: 'games/:id', component: GameSellersDetailsComponent, canActivate: [GameRouterActivatorService] },
+-  { path: 'games/:id', component: GameSellersComponent },
++  { path: 'games/:id', component: GameSellersComponent, canActivate: [GameRouterActivatorService] },
   { path: 'games/seller/new', component: CreateSellerComponent },
 +  { path: '404', component: Error404Component },
   { path: '', redirectTo: '/games', pathMatch: 'full' }
