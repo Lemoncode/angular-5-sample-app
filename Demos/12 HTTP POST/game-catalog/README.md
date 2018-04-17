@@ -32,7 +32,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ### 1. Start by refactor `gameStock.service.ts` to grab customers from our Web API.
 
-* Remove moc data
+* Remove mock data
 
 ```typescript
 import { Injectable } from '@angular/core';
@@ -46,11 +46,11 @@ import { map } from 'rxjs/operators';
 export class GameStockService {
   constructor(private http: HttpClient) {}
   getGames(): Observable<Game[]> {
-    return this.http.get<Game[]>('http://localhost:8000/api/games/');
+    return this.http.get<Game[]>('/api/games/');
   }
 
   getGame(name: string): Observable<Game> {
-    return this.http.get<Game>(`http://localhost:8000/api/games/${name}`);
+    return this.http.get<Game>(`/api/games/${name}`);
   }
   // https://github.com/ReactiveX/rxjs/blob/master/doc/lettable-operators.md
   getGameSellers(name: string): Observable<ISeller[]> {
@@ -202,7 +202,7 @@ export class GameStockService {
 +  }
 
   getGames(): Observable<Game[]> {
-    return this.http.get<Game[]>('http://localhost:8000/api/games/')
+    return this.http.get<Game[]>('/api/games/')
 +      .pipe(
 +          flatMap(g => g),
 +          map(this.mapGame),
@@ -215,7 +215,7 @@ export class GameStockService {
   }
 
   getGame(name: string): Observable<Game> {
-    return this.http.get<Game>(`http://localhost:8000/api/games/${name}`);
+    return this.http.get<Game>(`/api/games/${name}`);
   }
   // https://github.com/ReactiveX/rxjs/blob/master/doc/lettable-operators.md
   getGameSellers(name: string): Observable<ISeller[]> {

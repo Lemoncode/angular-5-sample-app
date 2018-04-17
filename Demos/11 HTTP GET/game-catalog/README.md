@@ -31,7 +31,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Steps to create the Web API
 
-### A. Create a new folder call `game-catlog/server`
+### A. Create a new folder call `game-catalog/server`
 
 ### B. Create a new folder call `server/models`. Inside this folder, create the following files: 
 * `gameModel.js`
@@ -98,10 +98,6 @@ const getGame = (name) => GAMES.find((game) => game.name === name);
 const addGame = (game) => {
     const imageUrl = (game.imageUrl) ? game.imageUrl : 'https://c1.staticflickr.com/6/5447/18686626819_224c6414ce_m.jpg';
     const gameWithImageUrlResolved = Object.assign({}, game, imageUrl);
-    // const gameWithImageUrlResolved = {
-    //     ...game,
-    //     imageUrl,
-    // };
     GAMES.push(gameWithImageUrlResolved);
 };
 const getGameIndexByName = (name) => GAMES.findIndex((g) => g.name === name);
@@ -377,7 +373,7 @@ console.log(`Server running on: ${port}`);
 ### F. Install server dependencies
 
 ```bash
-$npm install express --save
+$npm install express body-parser --save
 ```
 
 ### G. For last let's modify the `package.json`, to get the server started.
@@ -492,7 +488,7 @@ export class SellerCategoryService {
 -  getSellerCategories() {
 +  getSellerCategories(): Observable<ISellerCategory[]> {
 -    return SELLERCATEGORIES;
-+    return this.http.get<ISellerCategory[]>('http://localhost:8000/api/sellercategories');
++    return this.http.get<ISellerCategory[]>('/api/sellercategories');
 +  }
 }
 ```
