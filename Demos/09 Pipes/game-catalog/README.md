@@ -115,7 +115,7 @@ export class SellerDetailsComponent {
   <h4>{{seller.name}}</h4>
   <span>Cantidad disponible: {{seller.amount}}</span>
 -  <span>Precio unitario: {{seller.price}}</span>
-+  <span>Precio unitario: {{seller.price | currency:'EUR':true}}</span>
++  <span>Precio unitario: {{seller.price | currency:'EUR'}}</span>
 </div>
 ```
 
@@ -130,8 +130,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class AvailablePipe implements PipeTransform {
   transform(value: number): string {
     return (value > 0) ?
-      'glyphicon glyphicon-ok' :
-      'glyphicon glyphicon-remove';
+      'fa fa-check' :
+      'fa fa-times';
   }
 }
 
