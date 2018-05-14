@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   games: Game[];
   // game: Game;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.games = [
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
       new Game(
         'Sonic',
         '26 June 1981',
-        'https://www-sonicthehedgehog-com-content.s3.amazonaws.com/test/Sonic_Mania_Block_3_video_1_2.jpg',
+        'https://i.ytimg.com/vi/dfFd7Bu6xnc/hqdefault.jpg',
       ),
     ];
   }
