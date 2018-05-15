@@ -287,7 +287,7 @@ export class CreateSellerComponent implements OnInit {
 ```
 * Test now that it's working.
 
-### 9. Now lets register our form as reactive form, for that purpose, we have to use [formGroup]="newContractForm" on our form node.
+### 9. Now lets register our form as reactive form, for that purpose, we have to use [formGroup]="newSellerForm" on our form node.
 
 ```diff html
 <div class="row">
