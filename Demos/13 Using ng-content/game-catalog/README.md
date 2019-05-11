@@ -83,7 +83,7 @@ export class CollapsibleCardComponent {
 ### 3. Lets register in `app.module.ts` the new component.
 
 ```diff
-+import { CollapsiblecardComponent } from './common/collapsible-card.component';
++import { CollapsibleCardComponent } from './common/collapsible-card.component';
 ....
 @NgModule({
   declarations: [
